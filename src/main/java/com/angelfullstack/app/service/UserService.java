@@ -18,6 +18,8 @@ public interface UserService {
 
   public void deleteById(Long id);
 
-  public List<User> findByName(String name);
+  public List<User> findByNameStartingWith(String name);
+
+  public Page<User> findByOrderByNameDesc(int page, Pageable pageable);
 
 }

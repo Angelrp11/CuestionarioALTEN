@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +35,15 @@ public class UserController {
   @PostMapping
   public ResponseEntity<?> create(@RequestBody User user) {
     return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+  }
+
+  @GetMapping("/all")
+  public Page<User> readOrderByName(Pageable pageable) {
+    pageable = PageRequest.of(0, 3);
+    Page<User> userPag = userService.findAll(pageable);
+
+    return userPag;
+
   }
 
   // Read an user
@@ -98,9 +110,11 @@ public class UserController {
 
   @GetMapping("/enabled/{name}")
   public List<User> readEnabledUsers(@PathVariable(value = "name") String userName) {
-    return StreamSupport.stream(userService.findByName(userName).spliterator(), false)
+    return StreamSupport.stream(userService.findByNameStartingWith(userName).spliterator(), false)
         .collect(Collectors.toList());
 
   }
+
+
 
 }

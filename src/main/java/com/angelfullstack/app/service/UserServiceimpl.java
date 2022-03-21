@@ -49,8 +49,15 @@ public class UserServiceimpl implements UserService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<User> findByName(String name) {
-    return userRepository.findByName(name);
+  public List<User> findByNameStartingWith(String name) {
+    return userRepository.findByNameStartingWith(name);
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<User> findByOrderByNameDesc(int page, Pageable pageable) {
+    return userRepository.findByOrderByNameDesc(page, pageable);
+  }
+
 
 }
